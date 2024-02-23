@@ -12,13 +12,13 @@ type server struct {
 
 type handlerType func(conn net.Conn, server *server) error
 
-func CreateServer(host string, port uint16, networkType string) (*server, error) {
+func CreateServer(host string, port uint16) (*server, error) {
 	address := fmt.Sprintf("%s:%d", host, port)
-	listener, err := net.Listen(networkType, address)
+	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("%s server listening on %s \n", networkType, address)
+	fmt.Printf("server listening on %s \n", address)
 	serverInstance := server{address, listener}
 	return &serverInstance, nil
 }
