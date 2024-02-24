@@ -5,25 +5,25 @@ import (
 	"net"
 )
 
-type server struct {
+type Server struct {
 	address  string
 	listener net.Listener
 }
 
-type handlerType func(conn net.Conn, server *server) error
+type ServerHandler func(conn net.Conn, server *Server)
 
-func CreateServer(host string, port uint16) (*server, error) {
+func CreateServer(host string, port uint16) (*Server, error) {
 	address := fmt.Sprintf("%s:%d", host, port)
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		return nil, err
 	}
 	fmt.Printf("server listening on %s \n", address)
-	serverInstance := server{address, listener}
+	serverInstance := Server{address, listener}
 	return &serverInstance, nil
 }
 
-func (s *server) AcceptConnections(handler handlerType) {
+func (s *Server) AcceptConnections(handler ServerHandler) {
 	for {
 		conn, err := s.listener.Accept()
 		if err != nil {
